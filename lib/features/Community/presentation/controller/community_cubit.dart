@@ -41,7 +41,9 @@ List<String>named=[
       emit(SuccessSavaPostState());
     }
     index++;
-   
+
+
+
     String teacherCovet = jsonEncode(postCommit0.toJson());
     postString.add(teacherCovet);
     postString.forEach((element) {
