@@ -23,28 +23,14 @@ class HomeLayout extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
-  File? image;
-  final imagePicker = ImagePicker();
 
-  Future<bool> uploadImage() async {
-    var pickedImage = await imagePicker.pickImage(source: ImageSource.camera);
-    if (pickedImage != null) {
-      HomeLayoutCubit hlCubit = GetIt.instance<HomeLayoutCubit>();
-      hlCubit.setImg(ImageModel(File(pickedImage.path)));
-      // image = File(pickedImage.path);
-
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   int index = 0;
   List<Widget> tabs = [
     const HomeTap(),
     const CommunityTab(),
     BlocProvider(
-      create: (context) => getIt<ControlCubit>(),
+      create: (context) => serviceLocator<ControlCubit>(),
       child: const ControlScreen(),
     ),
     const SettingScreen(),
@@ -52,85 +38,91 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.asset(
-          "assets/images/12.jpg",
-          width: double.infinity,
-          fit: BoxFit.fitHeight,
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          extendBody: true,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              if (await uploadImage()) {
-                Navigator.pushNamed(context, AppRoutes.homeTap);
-              }
-            },
-            backgroundColor: Colors.teal,
-            shape: const CircleBorder(
-                side: BorderSide(color: Colors.white, width: 1.0)),
-            child: const Icon(
-              Icons.document_scanner_outlined,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          bottomNavigationBar: BottomAppBar(
-            elevation: 0,
-            color: Colors.white,
-            notchMargin: 8.0,
-            shape: const CircularNotchedRectangle(),
-            child: SingleChildScrollView(
-              child: BottomNavigationBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                type: BottomNavigationBarType.fixed,
-                currentIndex: index,
-                onTap: (idx) {
-                  index = idx;
-                  setState(() {});
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.home,
-                      color: index == 0
-                          ? MyColors.tapBarIconColor
-                          : MyColors.grayColor,
-                    ),
-                    backgroundColor: Colors.transparent,
-                    label: "Home",
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.chat,
-                          color: index == 1
-                              ? MyColors.tapBarIconColor
-                              : MyColors.grayColor),
-                      backgroundColor: Colors.transparent,
-                      label: "Community"),
-                  BottomNavigationBarItem(
-                      icon: ImageIcon(AssetImage("assets/images/plant.png"),
-                          color: index == 2
-                              ? MyColors.tapBarIconColor
-                              : MyColors.grayColor),
-                      label: "Control"),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.person,
-                          color: index == 3
-                              ? MyColors.tapBarIconColor
-                              : MyColors.grayColor),
-                      label: "Profile"),
-                ],
+    return
+     BlocBuilder<HomeLayoutCubit, HomeLayoutState>(
+          builder: (context, selectedCountryState) {
+            var cubit = HomeLayoutCubit.get(context);
+          return Stack(
+            children: [
+              Image.asset(
+                "assets/images/12.jpg",
+                width: double.infinity,
+                fit: BoxFit.fitHeight,
               ),
-            ),
-          ),
-          body: tabs[index],
-        ),
-      ],
-    );
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                extendBody: true,
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () async {
+                 cubit.getImage(context);
+
+
+                  },
+                  backgroundColor: Colors.teal,
+                  shape: const CircleBorder(
+                      side: BorderSide(color: Colors.white, width: 1.0)),
+                  child: const Icon(
+                    Icons.document_scanner_outlined,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+                bottomNavigationBar: BottomAppBar(
+                  elevation: 0,
+                  color: Colors.white,
+                  notchMargin: 8.0,
+                  shape: const CircularNotchedRectangle(),
+                  child: SingleChildScrollView(
+                    child: BottomNavigationBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      type: BottomNavigationBarType.fixed,
+                      currentIndex: index,
+                      onTap: (idx) {
+                        index = idx;
+                        setState(() {});
+                      },
+                      items: [
+                        BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.home,
+                            color: index == 0
+                                ? MyColors.tapBarIconColor
+                                : MyColors.grayColor,
+                          ),
+                          backgroundColor: Colors.transparent,
+                          label: "Home",
+                        ),
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.chat,
+                                color: index == 1
+                                    ? MyColors.tapBarIconColor
+                                    : MyColors.grayColor),
+                            backgroundColor: Colors.transparent,
+                            label: "Community"),
+                        BottomNavigationBarItem(
+                            icon: ImageIcon(AssetImage("assets/images/plant.png"),
+                                color: index == 2
+                                    ? MyColors.tapBarIconColor
+                                    : MyColors.grayColor),
+                            label: "Control"),
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.person,
+                                color: index == 3
+                                    ? MyColors.tapBarIconColor
+                                    : MyColors.grayColor),
+                            label: "Profile"),
+                      ],
+                    ),
+                  ),
+                ),
+                body: tabs[index],
+              ),
+            ],
+          );
+        }
+      );
   }
 }

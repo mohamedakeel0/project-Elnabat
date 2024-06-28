@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class PostCardItem extends StatelessWidget {
-  const PostCardItem({super.key});
+  const PostCardItem({super.key, required this.time, required this.isLike, required this.comment, required this.name, required this.like});
+
+final String name;
+final String time;
+final bool isLike;
+final String comment;
+final Function() like;
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +16,7 @@ class PostCardItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const Row(
+             Row(
               children: [
                 CircleAvatar(
                   backgroundColor: Colors.blueGrey,
@@ -25,7 +31,7 @@ class PostCardItem extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Habiba',
+                        name,
                       ),
                       SizedBox(
                         height: 1.0,
@@ -33,7 +39,7 @@ class PostCardItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '3h',
+                            time,
                             style: TextStyle(
                               fontSize: 9.0,
                             ),
@@ -55,25 +61,12 @@ class PostCardItem extends StatelessWidget {
             Container(
               height: 80.0,
               alignment: Alignment.centerLeft,
-              child: const Text(
-                'My Post',
+              child:  Text(
+               comment,
                 style: TextStyle(
                   fontSize: 25.0,
                 ),
               ),
-            ),
-            Row(
-              children: [
-                const Text(
-                  '100',
-                  style: TextStyle(),
-                ),
-                const SizedBox(
-                  width: 3.0,
-                ),
-                const Spacer(),
-                const Text('100 Comments'),
-              ],
             ),
             Container(
               height: 40.0,
@@ -84,22 +77,42 @@ class PostCardItem extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Image.asset('assets/images/singleLike.jpg'),
+                  isLike==true?    Expanded(
+                    child: InkWell(onTap: like,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Image.asset('assets/images/pngtree.png'),
+                      ),
+                    ),
+                  ): InkWell(onTap: like,
+                    child: Expanded(
+                      child: InkWell(onTap: like,
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Image.asset('assets/images/singleLike.jpg'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isLike==true?Expanded(
+                    child: InkWell(onTap: like,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Image.asset('assets/images/dislike.webp'),
+                      ),
+                    ),
+                  ):  Expanded(
+                    child: InkWell(onTap: like,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Image.asset('assets/images/dislike-button.png'),
+                      ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Image.asset('assets/images/comment.jpg'),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Image.asset('assets/images/share.jpg'),
                     ),
                   ),
                 ],

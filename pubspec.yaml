@@ -47,7 +47,9 @@ dependencies:
   equatable:
   flutter_bluetooth_serial: ^0.4.0
   shared_preferences: ^2.2.2
-
+  dio:
+  dartz:
+  flutter_secure_storage:
 dev_dependencies:
   flutter_test:
     sdk: flutter

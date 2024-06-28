@@ -1,5 +1,7 @@
 import 'package:final_project/features/home/presentation/widgets/history.dart';
+import 'package:final_project/layout/presentation/logic/home_layout_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HistoryColumn extends StatelessWidget {
   String date = " Sat, 13 Apr 2024  10:33:57 AM ";
@@ -8,30 +10,33 @@ class HistoryColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[100],
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            History('assets/images/4.jpg', date),
-            const SizedBox(height: 20),
-            History('assets/images/6.jpg', date),
-            const SizedBox(height: 20),
-            History('assets/images/77.jpg', date),
-            const SizedBox(height: 20),
-            History('assets/images/2.jpg', date),
-            const SizedBox(height: 20),
-            History('assets/images/6.jpg', date),
-            const SizedBox(height: 20),
-            History('assets/images/5.jpg', date),
-            const SizedBox(height: 20),
-            History('assets/images/4.jpg', date),
-            const SizedBox(height: 20),
-            History('assets/images/3.jpg', date),
-          ],
-        ),
-      ),
+    return  BlocBuilder<HomeLayoutCubit, HomeLayoutState>(
+        builder: (context, selectedCountryState) {
+          var cubit = HomeLayoutCubit.get(context);
+        return Container(
+          color: Colors.transparent,
+          child: SingleChildScrollView(
+            child:cubit.listProcessImage.isNotEmpty&&cubit.listProcessImage!=null? Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height-200,
+                  child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return History(cubit.listProcessImage[index].path, cubit.listProcessImage[index].date,cubit.listProcessImage[index].title);
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: cubit.listProcessImage.length,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+              ],
+            ):SizedBox(),
+          ),
+        );
+      }
     );
   }
 }

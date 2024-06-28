@@ -35,16 +35,14 @@ class Routes {
       case AppRoutes.login:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (_) => getIt<LoginCubit>(),
+                  create: (_) => serviceLocator<LoginCubit>(),
                   child: const LoginScreen(),
                 ));
       case AppRoutes.signUp:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                create: (_) => getIt<RegistrationCubit>(),
+                create: (_) => serviceLocator<RegistrationCubit>(),
                 child: const SignUpScreen()));
-      case AppRoutes.homeLayout:
-        return MaterialPageRoute(builder: (context) => const HomeLayout());
       case AppRoutes.homeLayout:
         return MaterialPageRoute(builder: (context) => const HomeLayout());
       case AppRoutes.homeTap:
@@ -54,7 +52,7 @@ class Routes {
       case AppRoutes.controlScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (_) => getIt<ControlCubit>(),
+            create: (_) => serviceLocator<ControlCubit>(),
             child: const ControlScreen(),
           ),
         );
